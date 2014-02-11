@@ -1,5 +1,6 @@
 package org.avontuur.games.starbars.scene;
 
+import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
 
 import org.andengine.entity.scene.background.Background;

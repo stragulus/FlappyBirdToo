@@ -1,4 +1,4 @@
-package org.avontuur.games.starbars.scene;
+package org.avontuur.games.starbars.base;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;

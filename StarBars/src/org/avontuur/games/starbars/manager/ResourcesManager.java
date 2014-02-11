@@ -41,8 +41,13 @@ public class ResourcesManager {
 
     //public ITiledTextureRegion player_region;
     public ITextureRegion player_region;
-    
+    public ITextureRegion menu_background_region;
+    public ITextureRegion menubutton_play_region;
+    //public ITextureRegion options_region;
     public ITextureRegion splash_region;
+        
+    private BuildableBitmapTextureAtlas menuTextureAtlas;
+
     private BitmapTextureAtlas splashTextureAtlas;
 
     //---------------------------------------------
@@ -75,7 +80,22 @@ public class ResourcesManager {
 
     private void loadMenuGraphics()
     {
-        
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
+    	menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1920, 1920, TextureOptions.BILINEAR);
+    	menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "background.png");
+    	menubutton_play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "button_play.png");
+    	//options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "button_options.png");
+    	       
+    	try 
+    	{
+    	    this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	    this.menuTextureAtlas.load();
+    	} 
+    	catch (final TextureAtlasBuilderException e)
+    	{
+    	        Debug.e(e);
+    	}
+
     }
     
     private void loadMenuAudio()

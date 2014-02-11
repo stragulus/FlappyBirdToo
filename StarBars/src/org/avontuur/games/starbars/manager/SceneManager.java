@@ -3,8 +3,9 @@ package org.avontuur.games.starbars.manager;
 import org.andengine.engine.Engine;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
-import org.avontuur.games.starbars.scene.BaseScene;
+import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.scene.LoadingScene;
+import org.avontuur.games.starbars.scene.MainMenuScene;
 import org.avontuur.games.starbars.scene.SplashScene;
 
 public class SceneManager
@@ -81,9 +82,9 @@ public class SceneManager
     public void createMenuScene()
     {
         ResourcesManager.getInstance().loadMenuResources();
-        //menuScene = new MainMenuScene();
+        menuScene = new MainMenuScene();
         loadingScene = new LoadingScene();
-        SceneManager.getInstance().setScene(loadingScene);
+        SceneManager.getInstance().setScene(menuScene);
         disposeSplashScene();
     }
     private void disposeSplashScene()

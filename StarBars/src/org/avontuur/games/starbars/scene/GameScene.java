@@ -8,6 +8,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 import org.avontuur.games.starbars.Player;
+import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.manager.SceneManager;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
 

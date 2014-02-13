@@ -4,6 +4,7 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
 
+import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
 
@@ -25,7 +26,7 @@ public class SplashScene extends BaseScene
     	};
     	        
     	splash.setScale(1.0f);
-    	splash.setPosition(640, 360);
+    	splash.setPosition(Constants.CAMERA_WIDTH / 2, Constants.CAMERA_HEIGHT / 2);
     	attachChild(splash);
 
     }

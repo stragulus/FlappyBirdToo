@@ -10,6 +10,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
 import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.base.BaseScene;
+import org.avontuur.games.starbars.manager.SceneManager;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener {
@@ -42,6 +43,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         switch(pMenuItem.getID())
         {
 	        case MENU_PLAY:
+	            //Load Game Scene!
+	            SceneManager.getInstance().loadGameScene(engine);
 	            return true;
 	        default:
 	            return false;

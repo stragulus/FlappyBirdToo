@@ -1,5 +1,6 @@
 package org.avontuur.games.starbars.scene;
 
+import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
 
@@ -13,7 +14,7 @@ public class LoadingScene extends BaseScene
     public void createScene()
     {
         setBackground(new Background(Color.WHITE));
-        attachChild(new Text(400, 240, resourcesManager.font, "Loading...", vbom));
+        attachChild(new Text(Constants.CAMERA_WIDTH/2, Constants.CAMERA_HEIGHT/2, resourcesManager.font, "Loading...", vbom));
     }
 
     @Override

@@ -1,9 +1,12 @@
 package org.avontuur.games.starbars.manager;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import org.avontuur.games.starbars.base.BaseScene;
+import org.avontuur.games.starbars.scene.GameScene;
 import org.avontuur.games.starbars.scene.LoadingScene;
 import org.avontuur.games.starbars.scene.MainMenuScene;
 import org.avontuur.games.starbars.scene.SplashScene;
@@ -87,6 +90,39 @@ public class SceneManager
         SceneManager.getInstance().setScene(menuScene);
         disposeSplashScene();
     }
+    
+    public void loadGameScene(final Engine mEngine)
+    {
+        setScene(loadingScene);
+        ResourcesManager.getInstance().unloadMenuTextures();
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback()
+        {
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadGameResources();
+                gameScene = new GameScene();
+                setScene(gameScene);
+            }
+        }));
+    }
+
+    public void loadMenuScene(final Engine mEngine)
+    {
+        setScene(loadingScene);
+        gameScene.disposeScene();
+        ResourcesManager.getInstance().unloadGameTextures();
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        {
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadMenuTextures();
+                setScene(menuScene);
+            }
+        }));
+    }
+
     private void disposeSplashScene()
     {
         ResourcesManager.getInstance().unloadSplashScreen();

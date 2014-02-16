@@ -1,6 +1,7 @@
 package org.avontuur.games.starbars.manager;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -16,6 +17,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
+import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.GameActivity;
 
 import android.graphics.Color;
@@ -29,9 +31,10 @@ public class ResourcesManager {
     
     public Engine engine;
     public GameActivity activity;
-    public Camera camera;
+    public BoundCamera camera;
     public VertexBufferObjectManager vbom;
     public Font font;
+    public int fontSize;
 
     
     //---------------------------------------------
@@ -68,13 +71,21 @@ public class ResourcesManager {
         loadGameAudio();
     }
     
+    public void unloadGameTextures()
+    {
+        // TODO (Since we did not create any textures for game scene yet)
+    }
+
     private void loadMenuFonts()
     {
         FontFactory.setAssetBasePath("font/");
-        final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        //XXX so the 1024 values here determine the maximum # of characters that can be displayed..silly.
+        final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
+        fontSize = Math.round(Constants.CAMERA_HEIGHT / 12f);
+        //fontSize = 80;
         font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, 
-        		activity.getAssets(), "capture_it.ttf", 50, true, Color.WHITE, 2, Color.BLACK);
+        		activity.getAssets(), "capture_it.ttf", fontSize, true, Color.WHITE, 2, Color.BLACK);
         font.load();
     }
 
@@ -101,6 +112,16 @@ public class ResourcesManager {
     private void loadMenuAudio()
     {
         
+    }
+
+    public void unloadMenuTextures()
+    {
+        menuTextureAtlas.unload();
+    }
+        
+    public void loadMenuTextures()
+    {
+        menuTextureAtlas.load();
     }
 
     private void loadGameGraphics()
@@ -147,7 +168,7 @@ public class ResourcesManager {
     	splash_region = null;
     }
     
-    public static void prepareManager(Engine engine, GameActivity activity, Camera camera, VertexBufferObjectManager vbom)
+    public static void prepareManager(Engine engine, GameActivity activity, BoundCamera camera, VertexBufferObjectManager vbom)
     {
         getInstance().engine = engine;
         getInstance().activity = activity;

@@ -99,7 +99,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private void createPhysics()
 	{
-	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
+	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -100), false); 
 	    //physicsWorld.setContactListener(contactListener());
 	    registerUpdateHandler(physicsWorld);
 	}

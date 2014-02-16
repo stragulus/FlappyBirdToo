@@ -7,6 +7,7 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.manager.ResourcesManager;
 
 import com.badlogic.gdx.math.Vector2;
@@ -54,6 +55,12 @@ public abstract class Player extends Sprite
 	            super.onUpdate(pSecondsElapsed);
 	            camera.onUpdate(0.1f);
 	            
+	            if (getY() >= Constants.CAMERA_HEIGHT) {
+	            	// you can't leave the screen!
+	            	if (body.getLinearVelocity().y > 0) {
+	            		body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 0));
+	            	}
+	            }
 	            if (getY() <= 0)
 	            {                    
 	                onDie();

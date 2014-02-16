@@ -51,6 +51,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
 	{
+		if (gameOverDisplayed)
+		{
+			return false;
+		}
+		
 	    if (pSceneTouchEvent.isActionDown())
 	    {
 	    	if (!firstTouch) {
@@ -126,6 +131,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    // only render sprite when it's on-screen
 	    //player.setCullingEnabled(true);
 	    attachChild(player);
+	}
+	
+	private void removePlayer()
+	{
+		detachChild(player);
 	}
 	
 	private void addToScore(int i)

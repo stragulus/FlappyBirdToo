@@ -72,6 +72,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     {
     	camera.setHUD(null);
     	camera.setChaseEntity(null);
+    	camera.setCenter(Constants.CAMERA_WIDTH/2, Constants.CAMERA_HEIGHT/2);
     }
 
 	private void createHUD()

@@ -33,9 +33,15 @@ public abstract class Player extends Sprite
 	    body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 12)); 
 	}
 	
+	public void startPlayer()
+	{
+		body.setType(BodyType.DynamicBody);
+	}
+	
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{        
-	    body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+		// start as a static body until the player initiates game play
+	    body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
 
 	    body.setUserData("player");
 	    body.setFixedRotation(true);

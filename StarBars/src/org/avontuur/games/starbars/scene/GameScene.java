@@ -29,9 +29,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private HUD gameHUD;
 	private Text scoreText;
 	private Text gameOverText;
+	private Text startGameText;
 	
 	private boolean gameOverDisplayed = false;
 	private int score = 0;
+	private boolean firstTouch = false;
 
 
 	@Override
@@ -41,7 +43,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		createHUD();
 		createPhysics();
 		createGameOverText();
+		createStartGameText();
 		createPlayer();
+		displayStartGameText();
 	    setOnSceneTouchListener(this);
 	}
 	
@@ -49,6 +53,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	{
 	    if (pSceneTouchEvent.isActionDown())
 	    {
+	    	if (!firstTouch) {
+	    		hideStartGameText();
+	    		player.startPlayer();
+	    		firstTouch = true;
+	    	}
 	    	player.jump();
 	    }
 	    return false;
@@ -136,5 +145,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    gameOverText.setPosition(camera.getCenterX(), camera.getCenterY());
 	    attachChild(gameOverText);
 	    gameOverDisplayed = true;
+	}
+	
+	private void createStartGameText()
+	{
+		startGameText = new Text(Constants.CAMERA_WIDTH / 2, Math.round((Constants.CAMERA_HEIGHT /2) * 1.3), resourcesManager.font, "Tap ship to jump!", vbom);
+	}
+	
+	private void displayStartGameText()
+	{
+		attachChild(startGameText);
+	}
+	
+	private void hideStartGameText()
+	{
+		this.detachChild(startGameText);
 	}
 }

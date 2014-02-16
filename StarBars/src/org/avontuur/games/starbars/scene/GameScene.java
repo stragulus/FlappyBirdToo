@@ -4,6 +4,7 @@ import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
@@ -14,8 +15,11 @@ import org.andengine.util.adt.color.Color;
 import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.entity.Player;
+import org.avontuur.games.starbars.manager.ResourcesManager;
 import org.avontuur.games.starbars.manager.SceneManager;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
+
+import android.content.res.Resources;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -45,6 +49,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		createGameOverText();
 		createStartGameText();
 		createPlayer();
+		createPillar();
 		displayStartGameText();
 	    setOnSceneTouchListener(this);
 	}
@@ -131,6 +136,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    // only render sprite when it's on-screen
 	    //player.setCullingEnabled(true);
 	    attachChild(player);
+	}
+	
+	private void createPillar()
+	{
+		Sprite pillar = new Sprite(Constants.CAMERA_WIDTH * 0.7f, Constants.CAMERA_HEIGHT / 2, 200, Constants.CAMERA_HEIGHT, ResourcesManager.getInstance().pillar_base_region, vbom);
+		attachChild(pillar);
 	}
 	
 	private void removePlayer()

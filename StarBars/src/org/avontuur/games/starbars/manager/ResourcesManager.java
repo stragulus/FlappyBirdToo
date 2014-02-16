@@ -40,18 +40,25 @@ public class ResourcesManager {
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
     //---------------------------------------------
-    public BuildableBitmapTextureAtlas gameTextureAtlas;
 
-    //public ITiledTextureRegion player_region;
-    public ITextureRegion player_region;
+    
+    // MENU resources
     public ITextureRegion menu_background_region;
     public ITextureRegion menubutton_play_region;
-    //public ITextureRegion options_region;
-    public ITextureRegion splash_region;
-        
     private BuildableBitmapTextureAtlas menuTextureAtlas;
-
+    
+    
+    //SPLASH SCREEN resources
+    public ITextureRegion splash_region;
     private BitmapTextureAtlas splashTextureAtlas;
+        
+    //GAME SCENE resources
+    public ITextureRegion player_region;
+    public ITextureRegion pillar_base_region;
+    public BuildableBitmapTextureAtlas gameTextureAtlas;
+    private BitmapTextureAtlas repeatablePillarAtlas;
+    
+
 
     //---------------------------------------------
     // CLASS LOGIC
@@ -71,11 +78,6 @@ public class ResourcesManager {
         loadGameAudio();
     }
     
-    public void unloadGameTextures()
-    {
-        // TODO (Since we did not create any textures for game scene yet)
-    }
-
     private void loadMenuFonts()
     {
         FontFactory.setAssetBasePath("font/");
@@ -131,7 +133,11 @@ public class ResourcesManager {
         
         //player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 3, 1);
         player_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "player.png");
-
+        
+        repeatablePillarAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 200, 28, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        pillar_base_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(repeatablePillarAtlas, activity, "pillar_base.png", 0, 0);
+        repeatablePillarAtlas.load();
+        
         try 
         {
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -144,6 +150,12 @@ public class ResourcesManager {
 
     }
     
+    public void unloadGameTextures()
+    {
+        repeatablePillarAtlas.unload();
+        gameTextureAtlas.unload();
+    }
+
     private void loadGameFonts()
     {
         

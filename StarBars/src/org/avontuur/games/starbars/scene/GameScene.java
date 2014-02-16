@@ -12,8 +12,8 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.avontuur.games.starbars.Constants;
-import org.avontuur.games.starbars.Player;
 import org.avontuur.games.starbars.base.BaseScene;
+import org.avontuur.games.starbars.entity.Player;
 import org.avontuur.games.starbars.manager.SceneManager;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
 
@@ -40,10 +40,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		createBackground();
 		createHUD();
 		createPhysics();
-		createPlayer();
 		createGameOverText();
+		createPlayer();
 	    setOnSceneTouchListener(this);
-	    
 	}
 	
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
@@ -92,6 +91,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private void createPhysics()
 	{
 	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false); 
+	    //physicsWorld.setContactListener(contactListener());
 	    registerUpdateHandler(physicsWorld);
 	}
 
@@ -113,8 +113,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
         	    }
 	        }
 	    };
-	    player.setCullingEnabled(true);
+	    
+	    // only render sprite when it's on-screen
+	    //player.setCullingEnabled(true);
+	    attachChild(player);
 	}
+	
 	private void addToScore(int i)
 	{
 	    score += i;

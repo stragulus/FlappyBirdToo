@@ -1,4 +1,4 @@
-package org.avontuur.games.starbars;
+package org.avontuur.games.starbars.entity;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.AnimatedSprite;
@@ -22,7 +22,8 @@ public abstract class Player extends Sprite
     {
         super(pX, pY, ResourcesManager.getInstance().player_region, vbo);
         createPhysics(camera, physicsWorld);
-        camera.setChaseEntity(this);
+        // for this game, do NOT have the camera chase the player! It should remain at the center of the screen.
+        //camera.setChaseEntity(this);
     }
 	
 	public abstract void onDie();

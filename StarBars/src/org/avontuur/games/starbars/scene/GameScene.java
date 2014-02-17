@@ -1,13 +1,13 @@
 package org.avontuur.games.starbars.scene;
 
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Random;
 
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
@@ -19,17 +19,14 @@ import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.entity.Pillar;
 import org.avontuur.games.starbars.entity.Player;
-import org.avontuur.games.starbars.manager.ResourcesManager;
 import org.avontuur.games.starbars.manager.SceneManager;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
-
-import android.content.res.Resources;
 
 import com.badlogic.gdx.math.Vector2;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener 
 {
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
+	private static final int PILLAR_GAP_SIZE = 300;
 
 	private PhysicsWorld physicsWorld;
     
@@ -44,7 +41,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private boolean firstTouch = false;
 
 	// pillars
-	private Queue<Pillar> pillars;
+	private LinkedList<Pillar> pillars;
 
 	@Override
 	public void createScene()
@@ -55,10 +52,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		createGameOverText();
 		createStartGameText();
 		createPlayer();
-		pillars = new LinkedList<Pillar>();
-		addPillar((int)Math.round(Constants.CAMERA_WIDTH * 0.8), 300, Constants.CAMERA_HEIGHT / 2 - 200);
 		displayStartGameText();
 	    setOnSceneTouchListener(this);
+	    createUpdateLoop();
 	}
 	
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
@@ -123,7 +119,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private void createBackground()
 	{
-		setBackground(new Background(Color.BLUE));
+		setBackground(new Background(Color.BLACK));
 	}
 
 	private void createPlayer()
@@ -145,48 +141,86 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    attachChild(player);
 	}
 	
-	private void addPillar(final int pX, final int pGapSize, final int pGapYOffset)
-	{
+	private void addPillar(final int pX, final int pGapSize, final int pGapYOffset) {
 		Pillar p = new Pillar(pX, pGapSize, pGapYOffset, this, physicsWorld, vbom);
 		pillars.add(p);
 	}
 	
-	private void removePlayer()
-	{
+	private void removePlayer()	{
 		detachChild(player);
 	}
 	
-	private void addToScore(int i)
-	{
+	private void addToScore(int i) {
 	    score += i;
 	    scoreText.setText("Score: " + score);
 	}
 	
-	private void createGameOverText()
-	{
+	private void createGameOverText() {
 	    gameOverText = new Text(0, 0, resourcesManager.font, "Game Over!", vbom);
 	}
 
-	private void displayGameOverText()
-	{
+	private void displayGameOverText() {
 	    camera.setChaseEntity(null);
 	    gameOverText.setPosition(camera.getCenterX(), camera.getCenterY());
 	    attachChild(gameOverText);
 	    gameOverDisplayed = true;
 	}
 	
-	private void createStartGameText()
-	{
+	private void createStartGameText() {
 		startGameText = new Text(Constants.CAMERA_WIDTH / 2, Math.round((Constants.CAMERA_HEIGHT /2) * 1.3), resourcesManager.font, "Tap ship to jump!", vbom);
 	}
 	
-	private void displayStartGameText()
-	{
+	private void displayStartGameText()	{
 		attachChild(startGameText);
 	}
 	
-	private void hideStartGameText()
-	{
+	private void hideStartGameText() {
 		this.detachChild(startGameText);
+	}
+	
+	private void managePillars() {
+		// adds and removes pillars as they move over the screen
+		// this method must be run in the update thread!
+	
+		if (pillars == null) {
+			pillars = new LinkedList<Pillar>();
+			addPillar(Constants.CAMERA_WIDTH, PILLAR_GAP_SIZE, Constants.CAMERA_HEIGHT / 2 - 200);
+			return;
+		}
+
+		// did the first pillar move out of the camera view?
+		Pillar p = pillars.peek();
+		if (p != null && p.getX() < -100) {
+			p.detach(this, physicsWorld);
+			pillars.poll();
+		}
+		
+		// is it time to add another pillar? do this whenever the last pillar in the queue 
+		// has passed a threshold value
+		p = null;
+		if (pillars.size() > 0) {
+			p = pillars.getLast();
+		}
+		
+		if (p.getX() <= (Constants.CAMERA_WIDTH - 500)) {
+			// TODO: gap offset @ random location
+			int rndNum = new Random().nextInt(Constants.CAMERA_HEIGHT - PILLAR_GAP_SIZE - 100);
+			addPillar(Constants.CAMERA_WIDTH, PILLAR_GAP_SIZE, rndNum + 50);
+		}
+	}
+	
+	private void createUpdateLoop() {
+		engine.registerUpdateHandler(new IUpdateHandler() {
+			
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				GameScene.this.managePillars();
+			}
+
+			@Override
+			public void reset() {
+				// TODO Auto-generated method stub
+			}
+		});
 	}
 }

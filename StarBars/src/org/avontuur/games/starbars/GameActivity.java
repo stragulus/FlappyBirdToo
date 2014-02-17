@@ -5,17 +5,14 @@ import java.io.IOException;
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
-import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
-import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.avontuur.games.starbars.manager.ResourcesManager;
 import org.avontuur.games.starbars.manager.SceneManager;
 
@@ -53,7 +50,6 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) {
 		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
-	    //pOnCreateSceneCallback.onCreateSceneFinished(scene);
 	}
 	
 	@Override
@@ -75,7 +71,9 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		System.exit(0);
+		if (this.isGameLoaded()) {
+			System.exit(0);
+		}
 	}
 	
 	@Override

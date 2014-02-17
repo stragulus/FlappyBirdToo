@@ -94,31 +94,9 @@ public class Pillar
 		bodies.add(body);
 		PhysicsConnector connector;
 		
-		if (connectors.size() == 0) {
-			connector = new PhysicsConnector(sprite, body, true, false) {
-		        @Override
-		        public void onUpdate(float pSecondsElapsed) {
-		        	super.onUpdate(pSecondsElapsed);
-		        	if (sprite.getX() < 0) {
-		        		Pillar.this.detach(scene, physicsWorld);
-		        	}
-		        	/*
-		        	if (sprite.getX() < 100) {
-			        	ResourcesManager.getInstance().engine.runOnUpdateThread(new Runnable() {
-			        		@Override
-			        		public void run() {
-			        			Pillar.this.detach(scene, physicsWorld);
-			        		}
-			        	});
-		        	}
-		        	*/
-		        }
-			};
-		} else {
-			connector = new PhysicsConnector(sprite, body, true, false);
-		}
-		
+		connector = new PhysicsConnector(sprite, body, true, false);
 		physicsWorld.registerPhysicsConnector(connector);
 		connectors.add(connector);
+		//XXX The connector has access to the body and sprite, so can ditch keeping track of those
 	}
 }

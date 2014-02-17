@@ -16,7 +16,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public abstract class Player extends Sprite
 {
-	
 	private Body body;
 	
 	public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld)

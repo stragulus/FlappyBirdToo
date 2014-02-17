@@ -55,6 +55,7 @@ public class ResourcesManager {
     //GAME SCENE resources
     public ITextureRegion player_region;
     public ITextureRegion pillar_base_region;
+    public ITextureRegion pillar_top_region;
     public BuildableBitmapTextureAtlas gameTextureAtlas;
     private BitmapTextureAtlas repeatablePillarAtlas;
     
@@ -133,9 +134,9 @@ public class ResourcesManager {
         
         //player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 3, 1);
         player_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "player.png");
-        
+        pillar_top_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "pillar_top.png"); //200x56
         repeatablePillarAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 200, 28, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        pillar_base_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(repeatablePillarAtlas, activity, "pillar_base.png", 0, 0);
+        pillar_base_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(repeatablePillarAtlas, activity, "pillar_base.png", 0, 0); //200x28
         repeatablePillarAtlas.load();
         
         try 

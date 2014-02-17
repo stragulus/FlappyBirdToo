@@ -1,5 +1,8 @@
 package org.avontuur.games.starbars.scene;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -14,6 +17,7 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.avontuur.games.starbars.Constants;
 import org.avontuur.games.starbars.base.BaseScene;
+import org.avontuur.games.starbars.entity.Pillar;
 import org.avontuur.games.starbars.entity.Player;
 import org.avontuur.games.starbars.manager.ResourcesManager;
 import org.avontuur.games.starbars.manager.SceneManager;
@@ -39,6 +43,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private int score = 0;
 	private boolean firstTouch = false;
 
+	// pillars
+	private Queue<Pillar> pillars;
 
 	@Override
 	public void createScene()
@@ -49,7 +55,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		createGameOverText();
 		createStartGameText();
 		createPlayer();
-		createPillar();
+		pillars = new LinkedList<Pillar>();
+		addPillar((int)Math.round(Constants.CAMERA_WIDTH * 0.8), 300, Constants.CAMERA_HEIGHT / 2 - 200);
 		displayStartGameText();
 	    setOnSceneTouchListener(this);
 	}
@@ -138,10 +145,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    attachChild(player);
 	}
 	
-	private void createPillar()
+	private void addPillar(final int pX, final int pGapSize, final int pGapYOffset)
 	{
-		Sprite pillar = new Sprite(Constants.CAMERA_WIDTH * 0.7f, Constants.CAMERA_HEIGHT / 2, 200, Constants.CAMERA_HEIGHT, ResourcesManager.getInstance().pillar_base_region, vbom);
-		attachChild(pillar);
+		Pillar p = new Pillar(pX, pGapSize, pGapYOffset, this, physicsWorld, vbom);
+		pillars.add(p);
 	}
 	
 	private void removePlayer()

@@ -52,7 +52,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private boolean handledOnDie = false;
 	private int score = 0;
 	private boolean firstTouch = false;
-
+	private Pillar lastScoredPillar = null;
+	
 	// pillars
 	private LinkedList<Pillar> pillars;
 
@@ -275,6 +276,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		}
 	}
 	
+	private void checkScore() {
+		for (Pillar p: pillars) {
+			// count score if the x coordinates are almost identical
+			if (Math.abs(player.getX() - p.getX()) < 5) {
+				if (lastScoredPillar == null || lastScoredPillar != p) {
+					addToScore(1);
+					lastScoredPillar = p;
+					break;
+				}
+			}
+		}
+	}
 	private void createUpdateLoop() {
 		engine.registerUpdateHandler(new IUpdateHandler() {
 			
@@ -287,6 +300,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 				if (!gameOverDisplayed) {
 				    // TODO: count score
 					GameScene.this.managePillars();
+					checkScore();
 				}
 			}
 

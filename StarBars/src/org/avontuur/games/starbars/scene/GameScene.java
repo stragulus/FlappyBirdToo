@@ -22,7 +22,14 @@ import org.avontuur.games.starbars.entity.Player;
 import org.avontuur.games.starbars.manager.SceneManager;
 import org.avontuur.games.starbars.manager.SceneManager.SceneType;
 
+import android.util.Log;
+
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener 
 {
@@ -41,6 +48,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private Text startGameText;
 	
 	private boolean gameOverDisplayed = false;
+	private boolean playerCollided = false;
+	private boolean handledOnDie = false;
 	private int score = 0;
 	private boolean firstTouch = false;
 
@@ -119,8 +128,51 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -100), false); 
 	    //physicsWorld.setContactListener(contactListener());
 	    registerUpdateHandler(physicsWorld);
+	    physicsWorld.setContactListener(createContactListener());
 	}
 
+	private ContactListener createContactListener() {
+		ContactListener contactListener = new ContactListener() {
+	        @Override
+	        public void beginContact(Contact contact)
+	        {
+	            final Fixture x1 = contact.getFixtureA();
+	            final Fixture x2 = contact.getFixtureB();
+	           
+	            String ud1 = (String)x1.getBody().getUserData();
+	            String ud2 = (String)x2.getBody().getUserData();
+	            
+	            if (ud1 != null && ud2 != null &&
+	            	(
+	            		(ud1.equals("player") && ud2.equals("pillar"))
+	            		|| (ud1.equals("pillar") && ud2.equals("player"))
+	            	)
+	            ) {
+	                GameScene.this.playerCollided = true;
+	            }
+
+	        }
+
+	        @Override
+	        public void endContact(Contact contact)
+	        {
+	               
+	        }
+
+			@Override
+			public void preSolve(Contact contact, Manifold oldManifold) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void postSolve(Contact contact, ContactImpulse impulse) {
+				// TODO Auto-generated method stub
+				
+			}
+	    };
+	    return contactListener;
+	}
 	private void createBackground()
 	{
 		setBackground(new Background(Color.BLACK));
@@ -128,14 +180,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private void createPlayer()
 	{
-	    player = new Player(Constants.CAMERA_WIDTH / 2, Constants.CAMERA_HEIGHT / 2, JUMP_FORCE, vbom, camera, physicsWorld)
-	    {
+	    player = new Player(Constants.CAMERA_WIDTH / 2, Constants.CAMERA_HEIGHT / 2, JUMP_FORCE, vbom, camera, physicsWorld) {
 	        @Override
-	        public void onDie()
-	        {
-	        	if (!gameOverDisplayed)
-        	    {
-        	        displayGameOverText();
+	        public void onDie() {
+	        	if (!handledOnDie && !gameOverDisplayed) {
+	        		engine.runOnUpdateThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							GameScene.this.gameOver();
+						}
+					});
+	        		handledOnDie = true;
         	    }
 	        }
 	    };
@@ -167,6 +223,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    gameOverText.setPosition(camera.getCenterX(), camera.getCenterY());
 	    attachChild(gameOverText);
 	    gameOverDisplayed = true;
+	}
+	
+	// run me in update thread!
+	private void gameOver() {
+		assert gameOverDisplayed == false;
+		displayGameOverText();
+		//physicsWorld.dispose();
 	}
 	
 	private void createStartGameText() {
@@ -217,7 +280,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				GameScene.this.managePillars();
+				if (playerCollided && !gameOverDisplayed) {
+					gameOver();
+        	    }
+				
+				if (!gameOverDisplayed) {
+				    // TODO: count score
+					GameScene.this.managePillars();
+				}
 			}
 
 			@Override

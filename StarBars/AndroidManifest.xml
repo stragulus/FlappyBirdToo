@@ -20,8 +20,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <!--  the configChanges line below makes sure the app works even when the phone disallows landscape
+              mode (as it failed to do on my HTC One with 'auto rotate' disabled)
+         -->
         <activity
             android:name="org.avontuur.games.starbars.GameActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

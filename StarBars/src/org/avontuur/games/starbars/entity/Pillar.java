@@ -25,14 +25,16 @@ public class Pillar
 	private List<Sprite> sprites;
 	private List<Body> bodies;
 	private List<PhysicsConnector> connectors;
+	private int speed;
 	
-	public Pillar(final float pX, final int pGapSize, final int gapYOffset, final Scene pScene, final PhysicsWorld physicsWorld, final VertexBufferObjectManager pVbom)
+	public Pillar(final float pX, final int pGapSize, final int gapYOffset, final int speed, final Scene pScene, final PhysicsWorld physicsWorld, final VertexBufferObjectManager pVbom)
 	{
 		//x is the leftmost coordinate of the pillar.
 		//gapYOffset is the bottom Y coordinate where the gap starts
 		final int pillarTopHeight = 56;
 		final int w = 200;
 
+		this.speed = speed;
 		sprites = new ArrayList<Sprite>(4);
 		bodies = new ArrayList<Body>(4);
 		connectors = new ArrayList<PhysicsConnector>(4);
@@ -85,12 +87,13 @@ public class Pillar
 	private void addPiece(final float x, final float y, final float w, final float h, final ITextureRegion region, final Scene scene, final PhysicsWorld physicsWorld, final VertexBufferObjectManager vbom)
 	{
 		final Sprite sprite = new Sprite(x, y, w, h, region, vbom);
+		sprite.setCullingEnabled(true);
 		scene.attachChild(sprite);
 		sprites.add(sprite);
 		final Body body = PhysicsFactory.createBoxBody(physicsWorld, sprite, BodyType.KinematicBody, FIXTURE_DEF);
 		body.setUserData("pillar");
 		body.setFixedRotation(true);
-		body.setLinearVelocity(-3, 0);
+		body.setLinearVelocity(this.speed, 0);
 		bodies.add(body);
 		PhysicsConnector connector;
 		

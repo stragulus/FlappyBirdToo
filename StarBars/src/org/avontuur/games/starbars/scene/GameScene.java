@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener 
 {
-	private static final int PILLAR_GAP_SIZE = 300;
+	private static final int PILLAR_GAP_SIZE = 400;
 
 	private PhysicsWorld physicsWorld;
     
@@ -137,13 +137,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    };
 	    
 	    // only render sprite when it's on-screen
-	    //player.setCullingEnabled(true);
+	    player.setCullingEnabled(true);
 	    attachChild(player);
 	}
 	
-	private void addPillar(final int pX, final int pGapSize, final int pGapYOffset) {
-		Pillar p = new Pillar(pX, pGapSize, pGapYOffset, this, physicsWorld, vbom);
-		pillars.add(p);
+	private void addPillar(final int x, final int gapSize, final int gapYOffset) {
+		final int speed = -8;
+		pillars.add(new Pillar(x, gapSize, gapYOffset, speed, this, physicsWorld, vbom));
 	}
 	
 	private void removePlayer()	{

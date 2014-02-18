@@ -20,7 +20,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Pillar
 {
-	final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+	final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0, 0);
 	
 	private List<Sprite> sprites;
 	private List<Body> bodies;

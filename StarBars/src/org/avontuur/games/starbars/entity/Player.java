@@ -17,20 +17,22 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public abstract class Player extends Sprite
 {
 	private Body body;
+	private int jumpForce;
 	
-	public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld)
+	public Player(float pX, float pY, final int jumpForce, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld)
     {
         super(pX, pY, ResourcesManager.getInstance().player_region, vbo);
         createPhysics(camera, physicsWorld);
         // for this game, do NOT have the camera chase the player! It should remain at the center of the screen.
         //camera.setChaseEntity(this);
+        this.jumpForce = jumpForce;
     }
 	
 	public abstract void onDie();
 
 	public void jump()
 	{
-	    body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 40)); 
+	    body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, jumpForce)); 
 	}
 	
 	public void startPlayer()

@@ -26,7 +26,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener 
 {
-	private static final int PILLAR_GAP_SIZE = 400;
+	// Game difficulty settings
+	private static final int PILLAR_GAP_SIZE = (int)Math.round(Constants.CAMERA_HEIGHT * 0.4);
+	private static final int PILLAR_SPEED = -9;
+	private static final int PILLAR_DISTANCE = 500;
+	private static final int JUMP_FORCE = 35;
 
 	private PhysicsWorld physicsWorld;
     
@@ -124,7 +128,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 
 	private void createPlayer()
 	{
-	    player = new Player(Constants.CAMERA_WIDTH / 2, Constants.CAMERA_HEIGHT / 2, vbom, camera, physicsWorld)
+	    player = new Player(Constants.CAMERA_WIDTH / 2, Constants.CAMERA_HEIGHT / 2, JUMP_FORCE, vbom, camera, physicsWorld)
 	    {
 	        @Override
 	        public void onDie()
@@ -141,9 +145,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    attachChild(player);
 	}
 	
-	private void addPillar(final int x, final int gapSize, final int gapYOffset) {
-		final int speed = -8;
-		pillars.add(new Pillar(x, gapSize, gapYOffset, speed, this, physicsWorld, vbom));
+	private void addPillar(final int x, final int gapYOffset) {
+		pillars.add(new Pillar(x, PILLAR_GAP_SIZE, gapYOffset, PILLAR_SPEED, this, physicsWorld, vbom));
 	}
 	
 	private void removePlayer()	{
@@ -184,7 +187,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	
 		if (pillars == null) {
 			pillars = new LinkedList<Pillar>();
-			addPillar(Constants.CAMERA_WIDTH, PILLAR_GAP_SIZE, Constants.CAMERA_HEIGHT / 2 - 200);
+			addPillar(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT / 2 - 200);
 			return;
 		}
 
@@ -202,10 +205,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 			p = pillars.getLast();
 		}
 		
-		if (p.getX() <= (Constants.CAMERA_WIDTH - 500)) {
+		if (p.getX() <= (Constants.CAMERA_WIDTH - PILLAR_DISTANCE)) {
 			// TODO: gap offset @ random location
 			int rndNum = new Random().nextInt(Constants.CAMERA_HEIGHT - PILLAR_GAP_SIZE - 100);
-			addPillar(Constants.CAMERA_WIDTH, PILLAR_GAP_SIZE, rndNum + 50);
+			addPillar(Constants.CAMERA_WIDTH, rndNum + 50);
 		}
 	}
 	

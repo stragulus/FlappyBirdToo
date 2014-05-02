@@ -71,15 +71,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    createUpdateLoop();
 	}
 	
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
-	{
-		if (gameOverDisplayed)
-		{
-			return false;
-		}
-		
-	    if (pSceneTouchEvent.isActionDown())
-	    {
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)	{
+		if (gameOverDisplayed) {
+    		return false;
+		}	
+
+		if (pSceneTouchEvent.isActionDown()) {
 	    	if (!firstTouch) {
 	    		hideStartGameText();
 	    		player.startPlayer();
@@ -91,27 +88,23 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	}
 
 	@Override
-    public void onBackKeyPressed()
-    {
-		SceneManager.getInstance().loadMenuScene(engine);
+    public void onBackKeyPressed(){
+		//SceneManager.getInstance().loadMenuScene(engine);
     }
 
     @Override
-    public SceneType getSceneType()
-    {
+    public SceneType getSceneType() {
         return SceneType.SCENE_GAME;
     }
 
     @Override
-    public void disposeScene()
-    {
+    public void disposeScene() {
     	camera.setHUD(null);
     	camera.setChaseEntity(null);
     	camera.setCenter(Constants.CAMERA_WIDTH/2, Constants.CAMERA_HEIGHT/2);
     }
 
-	private void createHUD()
-	{
+	private void createHUD() {
 	    gameHUD = new HUD();
 	    
 	    // CREATE SCORE TEXT
@@ -124,8 +117,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    camera.setHUD(gameHUD);
 	}
 
-	private void createPhysics()
-	{
+	private void createPhysics() {
 	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -100), false); 
 	    //physicsWorld.setContactListener(contactListener());
 	    registerUpdateHandler(physicsWorld);
@@ -174,8 +166,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    };
 	    return contactListener;
 	}
-	private void createBackground()
-	{
+	private void createBackground()	{
 		setBackground(new Background(Color.BLACK));
 	}
 
@@ -213,6 +204,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private void addToScore(int i) {
 	    score += i;
 	    scoreText.setText("Score: " + score);
+	    //TODO: highscores
 	}
 	
 	private void createGameOverText() {
@@ -230,7 +222,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private void gameOver() {
 		assert gameOverDisplayed == false;
 		displayGameOverText();
-		//physicsWorld.dispose();
+		// TODO: add timer to add buttons to do something? Or display the a 'medal'.
 	}
 	
 	private void createStartGameText() {

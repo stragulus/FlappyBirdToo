@@ -65,13 +65,6 @@ public class ResourcesManager {
     // CLASS LOGIC
     //---------------------------------------------
 
-    public void loadMenuResources()
-    {
-        loadMenuGraphics();
-        loadMenuAudio();
-        loadMenuFonts();
-    }
-    
     public void loadGameResources()
     {
         loadGameGraphics();
@@ -79,7 +72,7 @@ public class ResourcesManager {
         loadGameAudio();
     }
     
-    private void loadMenuFonts()
+    private void loadGameFonts()
     {
         FontFactory.setAssetBasePath("font/");
         //XXX so the 1024 values here determine the maximum # of characters that can be displayed..silly.
@@ -90,41 +83,6 @@ public class ResourcesManager {
         font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, 
         		activity.getAssets(), "capture_it.ttf", fontSize, true, Color.WHITE, 2, Color.BLACK);
         font.load();
-    }
-
-    private void loadMenuGraphics()
-    {
-    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-    	menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1920, 1920, TextureOptions.BILINEAR);
-    	menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "background.png");
-    	menubutton_play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "button_play.png");
-    	//options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "button_options.png");
-    	       
-    	try 
-    	{
-    	    this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
-    	    this.menuTextureAtlas.load();
-    	} 
-    	catch (final TextureAtlasBuilderException e)
-    	{
-    	        Debug.e(e);
-    	}
-
-    }
-    
-    private void loadMenuAudio()
-    {
-        
-    }
-
-    public void unloadMenuTextures()
-    {
-        menuTextureAtlas.unload();
-    }
-        
-    public void loadMenuTextures()
-    {
-        menuTextureAtlas.load();
     }
 
     private void loadGameGraphics()
@@ -157,11 +115,6 @@ public class ResourcesManager {
         gameTextureAtlas.unload();
     }
 
-    private void loadGameFonts()
-    {
-        
-    }
-    
     private void loadGameAudio()
     {
     	//TODO: add sound!

@@ -8,7 +8,6 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.avontuur.games.starbars.base.BaseScene;
 import org.avontuur.games.starbars.scene.GameScene;
 import org.avontuur.games.starbars.scene.LoadingScene;
-import org.avontuur.games.starbars.scene.MainMenuScene;
 import org.avontuur.games.starbars.scene.SplashScene;
 
 public class SceneManager
@@ -83,47 +82,13 @@ public class SceneManager
         pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
     }
     
-    public void createMenuScene()
-    {
-        ResourcesManager.getInstance().loadMenuResources();
-        menuScene = new MainMenuScene();
-        loadingScene = new LoadingScene();
-        SceneManager.getInstance().setScene(menuScene);
+    public void createGameScene() {
+        ResourcesManager.getInstance().loadGameResources();
+        gameScene = new GameScene();
+        setScene(gameScene);
         disposeSplashScene();
     }
     
-    public void loadGameScene(final Engine mEngine)
-    {
-        setScene(loadingScene);
-        ResourcesManager.getInstance().unloadMenuTextures();
-        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback()
-        {
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadGameResources();
-                gameScene = new GameScene();
-                setScene(gameScene);
-            }
-        }));
-    }
-
-    public void loadMenuScene(final Engine mEngine)
-    {
-        setScene(loadingScene);
-        gameScene.disposeScene();
-        ResourcesManager.getInstance().unloadGameTextures();
-        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
-        {
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadMenuTextures();
-                setScene(menuScene);
-            }
-        }));
-    }
-
     private void disposeSplashScene()
     {
         ResourcesManager.getInstance().unloadSplashScreen();
